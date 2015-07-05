@@ -4,7 +4,7 @@ console.log data
 hash = {}
 dates = []
 rc = 39
-delay = 2000
+delay = 2500
 color-by-cat = remain: \#67b238, icu: \#efb639, danger: \#e13123, ecmo: \#771d18, death: \#333333
 cname = remain: \一般病房, icu: \加護病房, danger: \病危, ecmo: \使用葉克膜, death: \死亡
 order = remain: 0, icu: 1, danger: 2, ecmo: 3, death: 4
@@ -77,7 +77,9 @@ init-chart = (data) ->
         transform: (it, idx) ->  
           x = idx % rc
           y = parseInt(idx / rc)
-          "translate(#{x * 180} #{y * 360}) scale(1.0)"
+          "translate(#{x * 20} #{y * 35}) scale(0.1)"
+          #"translate(#{x * 180} #{y * 360}) scale(1.0)"
+      ..style opacity: 0
       ..append \rect .attr do
         width: 180
         #height: -> 20 + it.area * 340 / 100
@@ -94,17 +96,28 @@ init-chart = (data) ->
         fill: -> \#000
         "xlink:href": '#shape-man'
         filter: 'url(#shadow)'
-    ..exit!remove!
+    ..exit!
+      .attr do
+        class: ""
+      .transition!duration 1000 
+        .style do
+          opacity: 0
+        .remove!
 
 update-chart = ->
-  d3.select \#svg .selectAll \g.victim .transition!duration delay/2 .attr do
+  d3.select \#svg .selectAll \g.victim .style opacity: 1
+  /*d3.select \#svg .selectAll \g.victim .transition!duration delay/2 .attr do
     transform: (it, idx) ->  
       x = idx % rc
       y = parseInt(idx / rc)
       "translate(#{x * 20} #{y * 35}) scale(0.1)"
-  d3.select \#svg .selectAll \g.victim .select \use .transition!duration delay/2 .attr do
+  */
+  d3.select \#svg .selectAll \g.victim .select \use .style do#.transition!duration delay/2 .attr do
     fill: -> it.color
     stroke: -> it.border
+  /*d3.select \#svg .selectAll \g.victim .select \use .transition!duration delay/2 .attr do
+    fill: -> it.color
+    stroke: -> it.border*/
 
 set-date = (date) ->
   d3.select \#text .text "2015 #{date}"
@@ -112,8 +125,23 @@ set-date = (date) ->
   update-chart!
 
 idx = 0
+playing = true
 iterate = ->
   set-date dates[idx]
   idx := (idx + 1) % (dates.length)
-setInterval (-> iterate!), delay
+setInterval (-> 
+  if playing => iterate!
+), delay
 iterate!
+
+window.move = do
+  state: (v) ->
+    playing := !!v
+    d3.select '#arrow-play path' .attr fill: -> if playing => \#fff else \#666
+    d3.select '#arrow-pause path' .attr fill: -> if !playing => \#fff else \#666
+  left: -> 
+    idx := (idx - 2 + dates.length) % (dates.length)
+    iterate!
+  right: ->
+    iterate!
+window.move.state playing

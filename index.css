@@ -39,3 +39,23 @@ body {
     text-align: center !important;
   }
 }
+g.victim {
+  -ms-transition: all 2s ease-in-out;
+  -moz-transition: all 2s ease-in-out;
+  -webkit-transition: all 2s ease-in-out;
+  -o-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
+}
+g.victim use {
+  -ms-transition: all 2s ease-in-out;
+  -moz-transition: all 2s ease-in-out;
+  -webkit-transition: all 2s ease-in-out;
+  -o-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
+}
+#arrow-left,
+#arrow-right,
+#arrow-play,
+#arrow-pause {
+  cursor: pointer;
+}
