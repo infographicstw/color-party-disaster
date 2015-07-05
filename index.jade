@@ -1,0 +1,82 @@
+doctype html
+//- basic libraries: jquery(1.10.2), d3js(3.3.11), angularjs(1.2.3), bootstrap(3.0)/semantic-ui(0.9.3/0.9.5)
+- var use = { cdn: true, og: true, favicon: true }
+- var lib = { jquery: true, d3js: true, angular: true, bootstrap: true, semantic: false }
+- var assets = "assets"
+- var thumbnail = "thumbnail.png"
+- var favicon = "thumbnail.png"
+mixin woman
+  circle(cx='82.6', cy='55.9', r='29.4')
+  path(d='M107.2,91.5c20.5,0,28.8,13.7,31.9,21.2l25.2,67.1c5,14.4-17.6,20.4-23,6.3l-22.7-61.6H112l39.3,109.6h-36.2v85.4 c0,14.6-27.1,14.5-27.1,0v-86h-11l0,85.9c0,14.7-27.2,14.7-27.2,0l0-85.3H13.6l39-109.6h-6.1l-22.7,61.8c-5.4,13.5-28.3,7.9-23-6.5 l25.2-67.2c2.7-7.7,11-21.2,31.7-21.2H107.2z')
+mixin man
+  circle(cx='87.3', cy='54.4', r='29.4')
+  path(d='M52.6,317.5c0,7.4,7.4,13.5,16.5,13.5c9.1,0,16.5-6,16.5-13.5l0-112.9h7.3l0,112.9c0,7.4,7.4,13.5,16.5,13.5 s16.5-6,16.5-13.5l0.1-194.6h7.2v71.7c0,14.4,23,14.4,23,0v-73.2c0-15.9-11.5-31.6-34.3-31.6l-65.8,0c-20.8,0-33.8,13.9-33.8,31.1 v73.7c0,14.3,23.2,14.3,23.2,0V123h7.4L52.6,317.5z')
+html(lang="en")
+  head(prefix="og: http://ogp.me/ns#")
+    meta(charset="utf-8")
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title template
+    // libraries
+    include library.jade
+    // custom files
+    link(rel="stylesheet",type="text/css",href="index.css")
+    script(type="text/javascript",src="tinycolor.js")
+    script(type="text/javascript",src="index.js")
+  body.text-center
+    h2 
+      | 八仙塵爆傷患狀況
+      small(style="font-size:12px") &nbsp; by #[a(href="http://blog.infographics.tw") 資料視覺化]
+    svg(style="width:0;height:0",viewBox="0 0 180 360")
+      defs
+        g#shape-woman: +woman
+        g#shape-man: +man
+        clipPath#clip-woman: +woman
+        clipPath#clip-man: +man
+        filter#shadow(x="-10",y="-10",width="200",height="380")
+          feOffset(result="offOut",in="SourceAlpha",dx="2",dy="2")
+          feGaussianBlur(result="blurOut",in="offOut",stdDeviation="2")
+          feBlend(in="SourceGraphic",in2="blurOut",mode="normal")
+    //-svg(style="width:100px;height:200px",viewBox="-10 -10 190 370")
+      rect(width="180",height="180",x="0",y="180",fill="#f00",clip-path="url(#clip-woman)")
+      use(x="0",y="0",xlink:href="#shape-woman",stroke="#800",stroke-width="8",fill="none",filter="url(#shadow)")
+    //-svg(style="width:100px;height:200px",viewBox="-10 -10 190 370")
+      rect(width="180",height="180",x="0",y="180",fill="#f00",clip-path="url(#clip-man)")
+      use(x="0",y="0",xlink:href="#shape-man",stroke="#800",stroke-width="8",fill="none",filter="url(#shadow)")
+    svg#svg(style="width:75%;height:75%;margin:auto",viewBox="0 0 800 530",preserveAspectRatio="xMidYMid")
+      text#text(font-size="40",fill="#fff",x="200",y="490",dominant-baseline="central",text-anchor="middle") 
+      g#legend(transform="translate(420,483)")
+      //-g(transform="scale(0.5)")
+        rect(width="180",height="180",x="0",y="180",fill="#f00",clip-path="url(#clip-man)")
+        use(x="0",y="0",xlink:href="#shape-man",stroke="#800",stroke-width="8",fill="none",filter="url(#shadow)")
+
+    .row
+      .col-sm-6.text-right
+        .fb-like-box(data-href="https://www.facebook.com/data.visualize",data-colorscheme="light",
+          data-show-faces="false",data-header="false",data-stream="false",data-show-border="false")
+      .col-sm-6.text-left
+        .fb-like-link
+          .fb-like(data-href="http://data.infographics.tw/viz/color-party-disaster/",data-width="300",data-layout="standard",data-action="like",data-show-faces="true",data-share="true",data-colorscheme="dark")
+
+    br
+    hr
+    p 
+      | 資料來源：中央社 / 蘋果日報 &nbsp; &nbsp;
+      small 各家媒體數據多少有些出入，圖解僅供參考，正確數據請參考衛福部公布之資料
+    br
+    #fb-root
+    script.
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&appId=1587437048209186&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+    script.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-59333798-1', 'auto');
+      ga('send', 'pageview');
+
