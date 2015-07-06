@@ -15,7 +15,7 @@ for line in data
   danger = parseInt(line["病危數"])
   ecmo = parseInt(line["葉克膜"])
   death = parseInt(line["死亡"])
-  count = parseInt(line["傷患數"])
+  count = parseInt(line["留院數"])
   if !isNaN(ecmo) => 
     icu = icu - ecmo
     if !isNaN(danger) => danger = danger - ecmo
