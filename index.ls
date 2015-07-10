@@ -16,6 +16,7 @@ for line in data
   ecmo = parseInt(line["葉克膜"])
   death = parseInt(line["死亡"])
   count = parseInt(line["留院數"])
+  note = (line["備註"])
   if !isNaN(ecmo) => 
     icu = icu - ecmo
     if !isNaN(danger) => danger = danger - ecmo
@@ -36,13 +37,14 @@ for line in data
     if !isNaN(danger) => danger = danger + ecmo
     icu = icu + ecmo
   if !isNaN(danger) => icu = icu + danger
-  hash[date] = {date, count, icu, danger, ecmo, death, list,remain} 
+  hash[date] = {date, count, icu, danger, ecmo, death, list, remain, note} 
 
 colors = <[#dcd38e #cda06a #c67f39 #bc6029 #b1270b #6c090e]>
 colormap = d3.scale.ordinal!domain [0 to 100 by 100/(colors.length - 1)] .range colors
 
 init-chart = (data) ->
   list = data.list
+  d3.select \#note-text .text (data.note or "")
   d3.select \#legend .selectAll \g .data [{name: cname[k], color: [v], count: data[k]} for k,v of color-by-cat]
     ..enter!append \g 
       ..append \circle .attr do
